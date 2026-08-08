@@ -1,0 +1,125 @@
+Done — removed the "STARE" heading. Here's the full code for GitHub:
+
+html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>...</title>
+<style>
+  body {
+    background: #0a0a0a;
+    color: #eee;
+    font-family: monospace;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+  }
+  h1 {
+    letter-spacing: 4px;
+    opacity: 0.6;
+    margin-bottom: 30px;
+  }
+  #display {
+    background: #111;
+    border: 1px solid #333;
+    color: #0f0;
+    font-size: 28px;
+    letter-spacing: 10px;
+    padding: 10px 20px;
+    width: 160px;
+    text-align: center;
+    margin-bottom: 20px;
+    min-height: 40px;
+  }
+  #pad {
+    display: grid;
+    grid-template-columns: repeat(3, 60px);
+    gap: 10px;
+  }
+  button {
+    background: #1a1a1a;
+    color: #eee;
+    border: 1px solid #333;
+    font-size: 20px;
+    padding: 15px 0;
+    cursor: pointer;
+  }
+  button:hover {
+    background: #262626;
+  }
+  #clear {
+    grid-column: span 3;
+    background: #2a1111;
+  }
+  #error {
+    color: #f55;
+    margin-top: 15px;
+    height: 20px;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  #error.show {
+    opacity: 1;
+  }
+</style>
+</head>
+<body>
+
+<div id="display"></div>
+<div id="pad">
+  <button onclick="press('1')">1</button>
+  <button onclick="press('2')">2</button>
+  <button onclick="press('3')">3</button>
+  <button onclick="press('4')">4</button>
+  <button onclick="press('5')">5</button>
+  <button onclick="press('6')">6</button>
+  <button onclick="press('7')">7</button>
+  <button onclick="press('8')">8</button>
+  <button onclick="press('9')">9</button>
+  <button id="clear" onclick="clearCode()">clear</button>
+  <button onclick="press('0')">0</button>
+</div>
+<div id="error">incorrect</div>
+
+<script>
+  const CODE = "5981";
+  let current = "";
+  const display = document.getElementById('display');
+  const errorMsg = document.getElementById('error');
+
+  function press(num) {
+    if (current.length >= 4) return;
+    current += num;
+    display.textContent = current;
+    errorMsg.classList.remove('show');
+
+    if (current.length === 4) {
+      setTimeout(check, 200);
+    }
+  }
+
+  function check() {
+    if (current === CODE) {
+      window.location.href = "solve.html";
+    } else {
+      errorMsg.classList.add('show');
+      setTimeout(() => {
+        current = "";
+        display.textContent = "";
+      }, 500);
+    }
+  }
+
+  function clearCode() {
+    current = "";
+    display.textContent = "";
+    errorMsg.classList.remove('show');
+  }
+</script>
+
+</body>
+</html>
