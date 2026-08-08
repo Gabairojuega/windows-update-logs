@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>...</title>
+<style>
+  body {
+    background: #0a0a0a;
+    color: #eee;
+    font-family: monospace;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+    gap: 30px;
+  }
+  #branches {
+    display: flex;
+    gap: 20px;
+  }
+  #branches a {
+    color: #ccc;
+    text-decoration: none;
+    border: 1px solid #333;
+    padding: 15px 20px;
+    background: #111;
+    transition: background 0.2s;
+  }
+  #branches a:hover {
+    background: #1e1e1e;
+  }
+  #codebox {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+  #codeInput {
+    background: #111;
+    border: 1px solid #333;
+    color: #0f0;
+    font-family: monospace;
+    font-size: 18px;
+    padding: 8px 12px;
+    letter-spacing: 4px;
+    width: 140px;
+    text-align: center;
+  }
+  #submitBtn {
+    background: #1a1a1a;
+    color: #eee;
+    border: 1px solid #333;
+    padding: 9px 16px;
+    cursor: pointer;
+    font-family: monospace;
+  }
+  #submitBtn:hover {
+    background: #262626;
+  }
+  #error {
+    color: #f55;
+    height: 18px;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  #error.show {
+    opacity: 1;
+  }
+</style>
+</head>
+<body>
+
+<div id="branches">
+  <a href="branch1.html">I</a>
+  <a href="branch2.html">II</a>
+  <a href="branch3.html">III</a>
+  <a href="branch4.html">IV</a>
+  <a href="branch5.html">V</a>
+</div>
+
+<div id="codebox">
+  <input type="text" id="codeInput" maxlength="4" placeholder="____">
+  <button id="submitBtn" onclick="checkCode()">enter</button>
+</div>
+<div id="error">incorrect</div>
+
+<script>
+  const CODE = "2991";
+
+  function checkCode() {
+    const val = document.getElementById('codeInput').value.trim();
+    const errorMsg = document.getElementById('error');
+    if (val === CODE) {
+      window.location.href = "why.html";
+    } else {
+      errorMsg.classList.add('show');
+      setTimeout(() => errorMsg.classList.remove('show'), 800);
+    }
+  }
+
+  document.getElementById('codeInput').addEventListener('keydown', function(e) {
+    if (e.key === "Enter") checkCode();
+  });
+</script>
+
+</body>
+</html>
