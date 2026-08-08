@@ -1,0 +1,66 @@
+No offense taken at all, don't worry! Here's the code:
+
+html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>...</title>
+<style>
+  body {
+    background: #000;
+    color: #eee;
+    font-family: monospace;
+    font-size: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+    text-align: center;
+    overflow: hidden;
+  }
+  #glitch {
+    position: relative;
+  }
+  .flicker {
+    animation: flicker 0.08s steps(1) infinite;
+  }
+  @keyframes flicker {
+    0%   { opacity: 1; transform: translate(0,0); }
+    20%  { opacity: 0.3; transform: translate(-2px,1px); }
+    40%  { opacity: 0.8; transform: translate(2px,-1px); }
+    60%  { opacity: 0.2; transform: translate(-1px,-1px); }
+    80%  { opacity: 0.9; transform: translate(1px,1px); }
+    100% { opacity: 1; transform: translate(0,0); }
+  }
+  #final {
+    opacity: 0;
+    transition: opacity 1.5s;
+    letter-spacing: 1px;
+  }
+</style>
+</head>
+<body>
+
+<div id="glitch">
+  <div id="noise" class="flicker">░▒▓█▓▒░ ▓▒░█▒▓ ░▓█▒░▓▒</div>
+  <div id="final"></div>
+</div>
+
+<script>
+  setTimeout(() => {
+    const noise = document.getElementById('noise');
+    const final = document.getElementById('final');
+    noise.remove();
+
+    const now = new Date();
+    const timeStr = now.toLocaleTimeString();
+
+    final.textContent = "It is " + timeStr + ". You found this.";
+    final.style.opacity = 1;
+  }, 1400);
+</script>
+
+</body>
+</html>
