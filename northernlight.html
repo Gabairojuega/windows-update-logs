@@ -54,4 +54,27 @@
     noise.remove();
     eyes.style.display = 'block';
 
-    document.addEventListener('mousemove',
+    document.addEventListener('mousemove', (e) => {
+      moveEye('pupilL', 60, 50, e.clientX, e.clientY);
+      moveEye('pupilR', 140, 50, e.clientX, e.clientY);
+    });
+  }, 1400);
+
+  function moveEye(id, baseX, baseY, mouseX, mouseY) {
+    const svg = document.querySelector('svg');
+    const rect = svg.getBoundingClientRect();
+    const originX = rect.left + baseX;
+    const originY = rect.top + baseY;
+
+    const angle = Math.atan2(mouseY - originY, mouseX - originX);
+    const maxDist = 8;
+    const px = baseX + Math.cos(angle) * maxDist;
+    const py = baseY + Math.sin(angle) * maxDist;
+
+    document.getElementById(id).setAttribute('cx', px);
+    document.getElementById(id).setAttribute('cy', py);
+  }
+</script>
+
+</body>
+</html>
