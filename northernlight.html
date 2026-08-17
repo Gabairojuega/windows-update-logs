@@ -53,6 +53,22 @@
       opacity: 0;
     }
   }
+  #eyes {
+    position: relative;
+  }
+  #key {
+    position: fixed;
+    font-size: 32px;
+    cursor: pointer;
+    user-select: none;
+    z-index: 10;
+  }
+  #door {
+    position: fixed;
+    font-size: 48px;
+    user-select: none;
+    z-index: 5;
+  }
 </style>
 </head>
 <body>
@@ -69,12 +85,18 @@
   </div>
 </div>
 
+<div id="key" style="left: 30%; top: 60%; display:none;"><img src="key.png" style="width: 80px; pointer-events: none;"></div>
+<div id="door" style="left: 55%; top: 55%; display:none;"><img src="door.png" style="width: 60px; pointer-events: none;"></div>
+
 <script>
   setTimeout(() => {
     const noise = document.getElementById('noise');
     const eyes = document.getElementById('eyes');
     noise.remove();
     eyes.style.display = 'block';
+
+    document.getElementById('key').style.display = 'block';
+    document.getElementById('door').style.display = 'block';
 
     document.addEventListener('mousemove', (e) => {
       moveEye('pupilL', 60, 50, e.clientX, e.clientY);
@@ -86,12 +108,4 @@
     });
 
     document.addEventListener('touchstart', (e) => {
-      const touch = e.touches[0];
-      moveEye('pupilL', 60, 50, touch.clientX, touch.clientY);
-      moveEye('pupilR', 140, 50, touch.clientX, touch.clientY);
-      spawnRing(touch.clientX, touch.clientY);
-    });
-
-    document.addEventListener('touchmove', (e) => {
-      const touch = e.touches[0];
-      moveEye('pupilL', 60, 50, touch.clientX, touch.clientY);
+      const touch = e.touches
