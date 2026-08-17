@@ -17,19 +17,21 @@
     text-align: center;
     overflow: hidden;
   }
-  #glitch {
+  #eyes {
     position: relative;
   }
-  .flicker {
-    animation: flicker 0.08s steps(1) infinite;
+  #key {
+    position: fixed;
+    font-size: 32px;
+    cursor: pointer;
+    user-select: none;
+    z-index: 10;
   }
-  @keyframes flicker {
-    0%   { opacity: 1; transform: translate(0,0); }
-    20%  { opacity: 0.3; transform: translate(-2px,1px); }
-    40%  { opacity: 0.8; transform: translate(2px,-1px); }
-    60%  { opacity: 0.2; transform: translate(-1px,-1px); }
-    80%  { opacity: 0.9; transform: translate(1px,1px); }
-    100% { opacity: 1; transform: translate(0,0); }
+  #door {
+    position: fixed;
+    font-size: 48px;
+    user-select: none;
+    z-index: 5;
   }
   .ring {
     position: fixed;
@@ -53,21 +55,21 @@
       opacity: 0;
     }
   }
-  #eyes {
-    position: relative;
+  .flicker {
+    animation: flicker 0.08s steps(1) infinite;
   }
-  #key {
-    position: fixed;
-    font-size: 32px;
-    cursor: pointer;
-    user-select: none;
-    z-index: 10;
+  @keyframes flicker {
+    0%   { opacity: 1; transform: translate(0,0); }
+    20%  { opacity: 0.3; transform: translate(-2px,1px); }
+    40%  { opacity: 0.8; transform: translate(2px,-1px); }
+    60%  { opacity: 0.2; transform: translate(-1px,-1px); }
+    80%  { opacity: 0.9; transform: translate(1px,1px); }
+    100% { opacity: 1; transform: translate(0,0); }
   }
-  #door {
-    position: fixed;
-    font-size: 48px;
-    user-select: none;
-    z-index: 5;
+  #final {
+    opacity: 0;
+    transition: opacity 1.5s;
+    letter-spacing: 1px;
   }
 </style>
 </head>
@@ -108,4 +110,101 @@
     });
 
     document.addEventListener('touchstart', (e) => {
-      const touch = e.touches
+      const touch = e.touches[0];
+      moveEye('pupilL', 60, 50, touch.clientX, touch.clientY);
+      moveEye('pupilR', 140, 50, touch.clientX, touch.clientY);
+      spawnRing(touch.clientX, touch.clientY);
+    });
+
+    document.addEventListener('touchmove', (e) => {
+      const touch = e.touches[0];
+      moveEye('pupilL', 60, 50, touch.clientX, touch.clientY);
+      moveEye('pupilR', 140, 50, touch.clientX, touch.clientY);
+    });
+  }, 1400);
+
+  function spawnRing(x, y) {
+    for (let i = 0; i < 3; i++) {
+      setTimeout(() => {
+        const ring = document.createElement('div');
+        ring.className = 'ring';
+        ring.style.left = x + 'px';
+        ring.style.top = y + 'px';
+        document.body.appendChild(ring);
+        setTimeout(() => ring.remove(), 1000);
+      }, i * 120);
+    }
+  }
+
+  // Key drag logic
+  let keyHeld = false;
+  const keyEl = document.getElementById('key');
+  const doorEl = document.getElementById('door');
+
+  keyEl.addEventListener('mousedown', (e) => {
+    keyHeld = true;
+    e.preventDefault();
+  });
+
+  document.addEventListener('mousemove', (e) => {
+    if (keyHeld) {
+      keyEl.style.left = e.clientX + 'px';
+      keyEl.style.top = e.clientY + 'px';
+      keyEl.style.transform = 'translate(-50%, -50%)';
+      checkDoorCollision(e.clientX, e.clientY);
+    }
+  });
+
+  document.addEventListener('mouseup', () => {
+    keyHeld = false;
+  });
+
+  // Touch support for key drag
+  keyEl.addEventListener('touchstart', (e) => {
+    keyHeld = true;
+    e.preventDefault();
+  });
+
+  document.addEventListener('touchmove', (e) => {
+    if (keyHeld) {
+      const touch = e.touches[0];
+      keyEl.style.left = touch.clientX + 'px';
+      keyEl.style.top = touch.clientY + 'px';
+      keyEl.style.transform = 'translate(-50%, -50%)';
+      checkDoorCollision(touch.clientX, touch.clientY);
+    }
+  });
+
+  document.addEventListener('touchend', () => {
+    keyHeld = false;
+  });
+
+  function checkDoorCollision(x, y) {
+    const doorRect = doorEl.getBoundingClientRect();
+    const doorCenterX = doorRect.left + doorRect.width / 2;
+    const doorCenterY = doorRect.top + doorRect.height / 2;
+    const dist = Math.hypot(x - doorCenterX, y - doorCenterY);
+
+    if (dist < 40) {
+      window.location.href = "flowers.html";
+    }
+  }
+
+  function moveEye(id, baseX, baseY, mouseX, mouseY) {
+    const svg = document.querySelector('svg');
+    const rect = svg.getBoundingClientRect();
+    const originX = rect.left + baseX;
+    const originY = rect.top + baseY;
+
+    const angle = Math.atan2(mouseY - originY, mouseX - originX);
+    const maxDist = 8;
+    const px = baseX + Math.cos(angle) * maxDist;
+    const py = baseY + Math.sin(angle) * maxDist;
+
+    document.getElementById(id).setAttribute('cx', px);
+    document.getElementById(id).setAttribute('cy', py);
+  }
+</script>
+
+</body>
+</html>
